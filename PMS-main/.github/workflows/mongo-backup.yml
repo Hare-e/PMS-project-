@@ -1,0 +1,41 @@
+name: MongoDB Backup
+
+on:
+  workflow_dispatch:
+  # Runs daily at 12:00 AM Philippine Time (PHT = UTC+8) => 16:00 UTC
+  schedule:
+    - cron: '0 16 * * *'
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install MongoDB Database Tools
+        run: |
+          wget -qO - https://www.mongodb.org/static/pgp/server-7.0.asc | sudo apt-key add -
+          echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+          sudo apt-get update
+          sudo apt-get install -y mongodb-database-tools
+
+      - name: Create backup directory
+        run: mkdir -p backups
+
+      - name: Dump MongoDB Database
+        run: |
+          mongodump --uri="$MONGODB_URI" --out=./backups/dump_$(date +'%Y%m%d_%H%M%S')
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+
+      - name: Compress backup
+        run: |
+          cd backups
+          tar -czf mongodb-backup-$(date +'%Y-%m-%dT%H-%M-%S').tar.gz dump_*/
+          rm -rf dump_*/
+
+      - name: Upload backup artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mongodb-backup-${{ github.run_id }}
+          path: backups/*.tar.gz
+          retention-days: 14

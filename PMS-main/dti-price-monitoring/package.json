@@ -1,0 +1,36 @@
+{
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "fetch:locations": "node scripts/fetch_locations.js"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.99.0",
+    "axios": "^1.13.5",
+    "docx": "^9.5.1",
+    "file-saver": "^2.0.5",
+    "firebase": "^10.7.0",
+    "html2canvas": "^1.4.1",
+    "idb": "^7.1.1",
+    "jspdf": "^4.0.0",
+    "jspdf-autotable": "^5.0.7",
+    "lucide-react": "^0.562.0",
+    "papaparse": "^5.5.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.13.0",
+    "recharts": "^3.2.1",
+    "xlsx": "^0.18.5"
+  },
+  "optionalDependencies": {
+    "react-window": "^1.8.8"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "terser": "^5.48.0",
+    "vite": "^5.0.8"
+  }
+}
